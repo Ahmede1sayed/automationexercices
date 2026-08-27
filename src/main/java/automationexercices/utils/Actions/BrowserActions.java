@@ -1,0 +1,77 @@
+package automationexercices.utils.Actions;
+
+import automationexercices.utils.WaitManager;
+import automationexercices.utils.DataReader.PropertyReader;
+import automationexercices.utils.Logs.LogsManager;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WindowType;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.util.Set;
+
+public class BrowserActions {
+    private final WebDriver driver;
+    private WaitManager waitManager;
+    public BrowserActions(WebDriver driver) {
+        this.driver = driver;
+        this.waitManager = new WaitManager(driver);
+    }
+    /**
+     * Maximize window
+     */
+    public void maximizeWindow() {
+        driver.manage().window().maximize();
+    }
+    // get current web page's URL
+    public String getCurrentUrl() {
+        String url = driver.getCurrentUrl();
+        LogsManager.info("Current URL: " + url);
+        return url;
+    }
+
+    // Navigate to a specific URL
+    public void navigateTo(String url) {
+        driver.get(url);
+        LogsManager.info("Navigated to URL: " + url);
+    }
+
+    // Refresh the current page
+    public void refreshPage() {
+        driver.navigate().refresh();
+    }
+
+    // close the current window
+    public void closeCurrentWindow() {
+        driver.close();
+    }
+
+    // open a new window
+    public void openNewWindow() {
+        driver.switchTo().newWindow(WindowType.WINDOW);
+    }
+
+    //close extension tab
+    public void closeExtensionTab() {
+        String currentWindowHandle = driver.getWindowHandle();
+        try {
+            new org.openqa.selenium.support.ui.FluentWait<>(driver)
+                    .withTimeout(java.time.Duration.ofSeconds(3))
+                    .pollingEvery(java.time.Duration.ofMillis(100))
+                    .until(d -> d.getWindowHandles().size() > 1); //wait briefly to see if an extension tab opens
+        } catch (org.openqa.selenium.TimeoutException e) {
+            LogsManager.info("No extension tab appeared, continuing with a single window");
+            return;
+        }
+        for (String windowHandle : driver.getWindowHandles()) //extension tab is opened
+        {
+            if (!windowHandle.equals(currentWindowHandle))
+                driver.switchTo().window(windowHandle).close(); //close the extension tab
+        }
+        driver.switchTo().window(currentWindowHandle); //switch back to the main window
+        LogsManager.info("Extension tab closed");
+    }
+
+
+}
