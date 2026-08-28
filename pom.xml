@@ -15,71 +15,7 @@
         <allure.version>2.29.1</allure.version>
         <aspectj.version>1.9.24</aspectj.version>
     </properties>
-    <!--    <profiles>
-            <profile >
-                <id>testng</id>
-                <build>
-                    <directory>test-output/target</directory>
-                    <plugins>
-                        &lt;!&ndash; Add the following options to your maven-surefire-plugin &ndash;&gt;
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>3.5.3</version>
-                            <configuration>
-                                <argLine>
-                                    -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-                                </argLine>
-                            </configuration>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>org.aspectj</groupId>
-                                    <artifactId>aspectjweaver</artifactId>
-                                    <version>${aspectj.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.apache.maven.surefire</groupId>
-                                    <artifactId>surefire-testng</artifactId>
-                                    <version>3.5.3</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-                </build>
-            </profile>
 
-            <profile >
-                <id>junit</id>
-                <build>
-                    <directory>test-output/target</directory>
-                    <plugins>
-                        &lt;!&ndash; Add the following options to your maven-surefire-plugin &ndash;&gt;
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>3.5.3</version>
-                            <configuration>
-                                <argLine>
-                                    -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-                                </argLine>
-                            </configuration>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>org.aspectj</groupId>
-                                    <artifactId>aspectjweaver</artifactId>
-                                    <version>${aspectj.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.apache.maven.surefire</groupId>
-                                    <artifactId>surefire-junit47</artifactId>
-                                    <version>3.5.3</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-                </build>
-            </profile>
-        </profiles>-->
     <build>
         <directory>test-output/target</directory>
         <plugins>
@@ -233,12 +169,11 @@
                     <groupId>org.testng</groupId>
                     <artifactId>testng</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.github.automatedowl</groupId>
-            <artifactId>allure-environment-writer</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
