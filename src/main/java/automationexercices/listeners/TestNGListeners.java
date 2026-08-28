@@ -43,7 +43,7 @@ public class TestNGListeners implements ISuiteListener, IExecutionListener, IInv
 
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
         if (method.isTestMethod()) {
-            if (testResult.getInstance() instanceof UITest)
+            if (testResult.getInstance().getClass().isAnnotationPresent(UITest.class))
             {
                 ScreenRecordManager.startRecording();
             }
@@ -55,7 +55,7 @@ public class TestNGListeners implements ISuiteListener, IExecutionListener, IInv
         WebDriver driver = null;
         if (method.isTestMethod())
         {
-            if (testResult.getInstance() instanceof UITest)
+            if (testResult.getInstance().getClass().isAnnotationPresent(UITest.class))
             {
                 ScreenRecordManager.stopRecording(testResult.getName());
                 if (testResult.getInstance() instanceof WebDriverProvider provider)
