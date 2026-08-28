@@ -14,16 +14,19 @@ import java.util.Set;
 public class BrowserActions {
     private final WebDriver driver;
     private WaitManager waitManager;
+
     public BrowserActions(WebDriver driver) {
         this.driver = driver;
         this.waitManager = new WaitManager(driver);
     }
+
     /**
      * Maximize window
      */
     public void maximizeWindow() {
         driver.manage().window().maximize();
     }
+
     // get current web page's URL
     public String getCurrentUrl() {
         String url = driver.getCurrentUrl();
@@ -54,24 +57,24 @@ public class BrowserActions {
 
     //close extension tab
     public void closeExtensionTab() {
-        String currentWindowHandle = driver.getWindowHandle();
-        try {
-            new org.openqa.selenium.support.ui.FluentWait<>(driver)
-                    .withTimeout(java.time.Duration.ofSeconds(3))
-                    .pollingEvery(java.time.Duration.ofMillis(100))
-                    .until(d -> d.getWindowHandles().size() > 1); //wait briefly to see if an extension tab opens
-        } catch (org.openqa.selenium.TimeoutException e) {
-            LogsManager.info("No extension tab appeared, continuing with a single window");
-            return;
+        if (PropertyReader.getProperty("extensions").equalsIgnoreCase("enabled")) {
+            String currentWindowHandle = driver.getWindowHandle(); //0 1
+            waitManager.fluentWait().until(
+                    d ->
+                    {
+                        return d.getWindowHandles().size() > 1; //wait until extension tab is opened
+                    }
+            );
+            for (String windowHandle : driver.getWindowHandles()) //extension tab is opened
+            {
+                if (!windowHandle.equals(currentWindowHandle))
+                    driver.switchTo().window(windowHandle).close(); //close the extension tab
+            }
+            driver.switchTo().window(currentWindowHandle); //switch back to the main window
+            LogsManager.info("Extension tab closed");
         }
-        for (String windowHandle : driver.getWindowHandles()) //extension tab is opened
-        {
-            if (!windowHandle.equals(currentWindowHandle))
-                driver.switchTo().window(windowHandle).close(); //close the extension tab
-        }
-        driver.switchTo().window(currentWindowHandle); //switch back to the main window
-        LogsManager.info("Extension tab closed");
     }
+
 
 
 }
