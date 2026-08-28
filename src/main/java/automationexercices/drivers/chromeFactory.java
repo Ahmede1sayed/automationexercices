@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +26,7 @@ public class chromeFactory extends AbstractDriver {
         options.addArguments("--start-maximized");
         Map<String, Object> prefs = new HashMap<>();
         String userDir = System.getProperty("user.dir");
-        String downloadPath = userDir + "\\src\\test\\resources\\downloads";
-        prefs.put("profile.default_content_settings.popups", 0);
+        String downloadPath = userDir + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "downloads";        prefs.put("profile.default_content_settings.popups", 0);
         prefs.put("download.prompt_for_download", false);
         prefs.put("download.default_directory",downloadPath);
         options.setExperimentalOption("prefs", prefs);
